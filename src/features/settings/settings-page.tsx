@@ -1,0 +1,30 @@
+'use client';
+import {useState,type FormEvent} from 'react';
+import {useQueryClient} from '@tanstack/react-query';
+import {useRouter} from 'next/navigation';
+import {UserRound,Building2,ShieldCheck,Trash2,Plus} from 'lucide-react';
+import {PageHeader} from '@/components/shared/page-header';
+import {Card,CardContent} from '@/components/ui/card';
+import {Button} from '@/components/ui/button';
+import {Input} from '@/components/ui/input';
+import {useWorkspace} from '@/components/layout/app-shell';
+import {useAuthStatus,useActiveScan} from '@/lib/api/queries';
+import {backend} from '@/lib/api/client';
+import {StatusBadge} from '@/components/shared/status-badge';
+import {ConfirmDialog} from '@/components/shared/confirm-dialog';
+export function SettingsPage(){
+ const {workspace,demo}=useWorkspace();const {data:scan}=useActiveScan();const {data:auth}=useAuthStatus(scan?.aws_connection_id);const client=useQueryClient();const router=useRouter();
+ const [name,setName]=useState(workspace?.name||'');const [newName,setNewName]=useState('');const [deleteName,setDeleteName]=useState('');const [deleting,setDeleting]=useState(false);const [busy,setBusy]=useState(false);const [message,setMessage]=useState('');const [error,setError]=useState('');
+ const isOwner=!demo&&workspace?.role==='OWNER';
+ async function rename(e:FormEvent){e.preventDefault();if(!workspace)return;setBusy(true);setError('');try{await backend(`/workspaces/${workspace.id}`,{method:'PATCH',body:{name:name.trim()}});setMessage('Workspace renamed. Reload to display the new name in the sidebar.');void client.invalidateQueries({queryKey:['workspaces']});router.refresh();}catch(e){setError(e instanceof Error?e.message:'Rename failed');}finally{setBusy(false);}}
+ async function create(e:FormEvent){e.preventDefault();setBusy(true);setError('');try{await backend('/workspaces',{method:'POST',body:{name:newName.trim()}});setMessage('Workspace created. Reload to select it in the sidebar.');setNewName('');router.refresh();}catch(e){setError(e instanceof Error?e.message:'Create failed');}finally{setBusy(false);}}
+ async function remove(){if(!workspace||deleteName!==workspace.name)return;setBusy(true);setError('');try{await backend(`/workspaces/${workspace.id}`,{method:'DELETE'});window.location.assign('/overview');}catch(e){setError(e instanceof Error?e.message:'Delete failed');}finally{setBusy(false);setDeleting(false);}}
+ return <><PageHeader title="Settings" description="Account information, client workspace governance and AWS session status."/>
+ {message&&<div className="alert mb-4">{message}</div>}{error&&<div className="alert danger mb-4">{error}</div>}
+ <div className="simple-split"><Card><CardContent><div className="flex items-center gap-3 mb-5"><span className="metric-icon blue"><UserRound size={22}/></span><div><h2 className="card-heading">Current Workspace</h2><p className="card-description">Tenant-scoped authorization context</p></div></div><div className="text-xs mb-3"><span className="text-slate-500">Name:</span> <strong>{workspace?.name||'—'}</strong></div><div className="text-xs mb-4"><span className="text-slate-500">Role:</span> <StatusBadge status={workspace?.role}/></div>{isOwner&&<form onSubmit={e=>void rename(e)}><label className="form-label" htmlFor="renameWorkspace">Rename workspace</label><div className="flex gap-2"><Input id="renameWorkspace" value={name} minLength={2} required onChange={e=>setName(e.target.value)}/><Button type="submit" disabled={busy||name.trim()===workspace.name}>Update</Button></div></form>}</CardContent></Card>
+ <Card><CardContent><div className="flex items-center gap-3 mb-5"><span className="metric-icon green"><ShieldCheck size={22}/></span><div><h2 className="card-heading">AWS Session</h2><p className="card-description">Connection metadata only; secrets are not displayed</p></div></div><div className="flex justify-between py-3 border-b border-slate-100 text-xs"><span>Account</span><strong>{scan?.account?.account_id||'—'}</strong></div><div className="flex justify-between py-3 border-b border-slate-100 text-xs"><span>Authorization</span><StatusBadge status={auth?.connected?'CONNECTED':'NOT CONNECTED'}/></div><div className="flex justify-between py-3 text-xs"><span>Authentication method</span><strong>{auth?.auth_type||'—'}</strong></div></CardContent></Card></div>
+ <div className="simple-split mt-5"><Card><CardContent><div className="flex gap-2 items-center mb-4"><Building2 size={18} className="text-blue-600"/><h2 className="card-heading">Add Client Workspace</h2></div><form onSubmit={e=>void create(e)}><label className="form-label" htmlFor="createWorkspace">Client / workspace name</label><div className="flex gap-2"><Input id="createWorkspace" value={newName} minLength={2} required placeholder="Example: New Client Ltd" onChange={e=>setNewName(e.target.value)}/><Button variant="primary" disabled={busy||demo} type="submit"><Plus size={14}/>Create</Button></div></form></CardContent></Card>
+ <Card><CardContent><div className="flex gap-2 items-center mb-4 text-rose-600"><Trash2 size={18}/><h2 className="card-heading">Danger Zone</h2></div><p className="page-description mb-3">Deleting a workspace permanently removes associated connections, saved scans and chats from the application.</p>{isOwner?<><label className="form-label" htmlFor="deleteConfirm">Type {workspace.name} to confirm</label><Input id="deleteConfirm" value={deleteName} onChange={e=>setDeleteName(e.target.value)}/><Button variant="danger" className="mt-3" disabled={deleteName!==workspace.name||busy} onClick={()=>setDeleting(true)}>Delete Workspace</Button></>:<p className="small-note">Only the workspace owner may delete the workspace.</p>}</CardContent></Card></div>
+ <ConfirmDialog open={deleting} title="Delete this workspace permanently?" description="This operation removes the entire client workspace with its scans and chats. It cannot be undone. AWS resources are not deleted." confirmLabel="Permanently delete" busy={busy} onClose={()=>setDeleting(false)} onConfirm={()=>void remove()}/>
+ </>;
+}

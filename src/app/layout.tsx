@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 export const metadata: Metadata = {
-  title: "New-DhanushGuard",
+  title: "CloudGuard",
   description:
     "Read-only cloud infrastructure discovery and evidence intelligence",
 };

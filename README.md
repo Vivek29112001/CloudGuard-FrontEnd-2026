@@ -1,4 +1,4 @@
-# new-DhanushGuard — Next.js frontend
+# CloudGuard — Next.js frontend
 
 A modular, evidence-aware frontend based on the supplied AWS Auditor Streamlit UI and approved dark-sidebar dashboard reference.
 
@@ -97,4 +97,4 @@ npx shadcn@latest add dialog sheet table select dropdown-menu tooltip skeleton
 ```
 
 Review the generated diff and preserve established design tokens, component APIs and accessibility behaviors. Prefer code-owned components over pulling in heavyweight UI suites.
-"# Multi-Cloud-MCP-Audit-NLP-Intelligence-Platform-Front-end" 
+"# Multi-Cloud-MCP-Audit-NLP-Intelligence-Platform-Front-end"

@@ -65,7 +65,7 @@
 //   return (
 //     <>
 //       <PageHeader
-//         title="Welcome to New-DhanushGuard"
+//         title="Welcome to CloudGuard"
 //         description="Analyze your AWS environment with evidence-backed infrastructure discovery and read-only investigation."
 //         actions={
 //           <Link href="/scan">
@@ -411,7 +411,7 @@ export function OverviewPage() {
   return (
     <>
       <PageHeader
-        title="Welcome to New-DhanushGuard"
+        title="Welcome to CloudGuard"
         description="Analyze your AWS environment with evidence-backed infrastructure discovery and read-only investigation."
         actions={
           <Link href="/scan">

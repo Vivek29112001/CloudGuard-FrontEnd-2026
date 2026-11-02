@@ -32,7 +32,7 @@ export default function Onboarding() {
       <div className="auth-card">
         <div className="auth-brand">
           <Cloud color="#2865f4" />
-          New-DhanushGuard
+          CloudGuard
         </div>
         <h1 className="auth-heading">Create your client workspace</h1>
         <p className="auth-description">

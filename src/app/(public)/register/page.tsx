@@ -40,7 +40,7 @@ export default function RegisterPage() {
           <span className="brand-icon">
             <Cloud color="white" />
           </span>
-          New-DhanushGuard
+          CloudGuard
         </div>
         <h1 className="auth-heading">Create your account</h1>
         <p className="auth-description">

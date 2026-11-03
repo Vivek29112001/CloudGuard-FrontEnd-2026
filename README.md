@@ -1,4 +1,4 @@
-# CloudGuard — Next.js frontend
+# new-DhanushGuard — Next.js frontend
 
 A modular, evidence-aware frontend based on the supplied AWS Auditor Streamlit UI and approved dark-sidebar dashboard reference.
 

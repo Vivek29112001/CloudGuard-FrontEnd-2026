@@ -36,7 +36,7 @@ export default function LoginPage() {
           <span className="brand-icon">
             <Cloud size={21} color="white" />
           </span>{" "}
-          CloudGuard
+          new-DhanushGuard
         </div>
         <div className="auth-heading">Welcome back</div>
         <p className="auth-description">

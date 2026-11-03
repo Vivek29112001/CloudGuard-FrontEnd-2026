@@ -92,7 +92,7 @@
 //           <span className="brand-icon">
 //             <Cloud size={20} color="white" fill="#70a7ff" />
 //           </span>
-//           CloudGuard
+//           new-DhanushGuard
 //         </Link>
 //         <div className="nav-section">Workspace</div>
 //         <select
@@ -171,7 +171,7 @@
 //         <span className="brand-icon">
 //           <Cloud size={18} />
 //         </span>
-//         CloudGuard
+//         new-DhanushGuard
 //       </Link>
 //       {nav.map(({ href, label, icon: Icon }) => (
 //         <Link className="nav-link" key={href} href={href} onClick={onClose}>
@@ -391,7 +391,7 @@ function Sidebar({
           <span className="brand-icon">
             <Cloud size={20} color="white" fill="#70a7ff" />
           </span>
-          CloudGuard
+          new-DhanushGuard
         </Link>
         <div className="nav-section">Workspace</div>
         <select
@@ -470,7 +470,7 @@ function MobileSidebar({ onClose }: { onClose: () => void }) {
         <span className="brand-icon">
           <Cloud size={18} />
         </span>
-        CloudGuard
+        new-DhanushGuard
       </Link>
       {nav.map(({ href, label, icon: Icon }) => (
         <Link className="nav-link" key={href} href={href} onClick={onClose}>
